@@ -115,7 +115,10 @@ def main():
 
         # Wait for all processes to complete
         for process in processes:
-            process.join()
+            if isinstance(process, Process):
+                process.join()
+            elif isinstance(process, subprocess.Popen):
+                process.wait()
 
     except KeyboardInterrupt:
         print("\nStopping all services...")
