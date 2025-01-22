@@ -22,6 +22,3 @@ class BaseDatabase:
     async def get_database(self):
         """Get database instance"""
         return self.client[self.database_name]
-
-
-db = Database()

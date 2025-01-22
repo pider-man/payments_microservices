@@ -1,4 +1,6 @@
 from config import settings
+from shared.utils.base_database import BaseDatabase
+
 
 class Database(BaseDatabase):
     def __init__(self):
