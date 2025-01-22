@@ -37,7 +37,6 @@ source venv/bin/activate
 2. Install requirements:
 ```bash
 pip install -r requirements.txt
-pip install -e ./shared
 ```
 
 3. Start the services:
