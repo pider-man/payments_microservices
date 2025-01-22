@@ -46,10 +46,18 @@ def start_mongodb():
         sys.exit(1)
 
 
+def setup_pythonpath():
+    """Add shared directory to PYTHONPATH"""
+    shared_path = os.path.join(os.getcwd(), "shared")
+    if os.path.exists(shared_path):
+        os.environ["PYTHONPATH"] = f"{shared_path}{os.pathsep}{os.environ.get('PYTHONPATH', '')}"
+
+
 def run_service(command):
     """Run a service using the specified command"""
     try:
-        subprocess.run(command, shell=True, check=True)
+        setup_pythonpath()
+        subprocess.run(command, shell=True, check=True, env=os.environ)
     except subprocess.CalledProcessError as e:
         print(f"Service failed to start: {e}")
     except KeyboardInterrupt:
