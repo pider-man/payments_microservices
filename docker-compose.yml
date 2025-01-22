@@ -1,0 +1,42 @@
+services:
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  user-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: user_service
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGODB_URL=mongodb://mongodb:27017
+      - DATABASE_NAME=user_service_db
+      - JWT_SECRET_KEY=sEcReT
+    depends_on:
+      - mongodb
+
+  order-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: order_service
+    ports:
+      - "8001:8001"
+    environment:
+      - MONGODB_URL=mongodb://mongodb:27017
+      - DATABASE_NAME=order_service_db
+      - USER_SERVICE_URL=http://user-service:8000
+      - SERVICE_PORT=8001
+    depends_on:
+      - mongodb
+      - user-service
+
+volumes:
+  mongodb_data:

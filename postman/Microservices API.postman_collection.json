@@ -1,0 +1,294 @@
+{
+	"info": {
+		"_postman_id": "9f0cff29-0a5c-4eba-a6b6-0d74b3785bcb",
+		"name": "Microservices API",
+		"description": "Collection for User Service and Order Service endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18952199"
+	},
+	"item": [
+		{
+			"name": "User Service",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"name@domain.com\",\n    \"full_name\": \"User User\",\n    \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "{{user_service_url}}/users/createUser",
+							"host": [
+								"{{user_service_url}}"
+							],
+							"path": [
+								"users",
+								"createUser"
+							]
+						},
+						"description": "Create a new user account"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.collectionVariables.set(\"access_token\", jsonData.access_token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "username=name@domain.com&password=password"
+						},
+						"url": {
+							"raw": "{{user_service_url}}/token",
+							"host": [
+								"{{user_service_url}}"
+							],
+							"path": [
+								"token"
+							]
+						},
+						"description": "Login and get access token"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{user_service_url}}/users/me",
+							"host": [
+								"{{user_service_url}}"
+							],
+							"path": [
+								"users",
+								"me"
+							]
+						},
+						"description": "Get current user information"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{user_service_url}}/users/:user_id",
+							"host": [
+								"{{user_service_url}}"
+							],
+							"path": [
+								"users",
+								":user_id"
+							],
+							"variable": [
+								{
+									"key": "user_id",
+									"value": "",
+									"description": "ID of the user to retrieve"
+								}
+							]
+						},
+						"description": "Get user information by ID"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order Service",
+			"item": [
+				{
+					"name": "Create Order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"items\": [\n        {\n            \"product_id\": \"123\",\n            \"quantity\": 2,\n            \"price_per_unit\": 29.99\n        }\n    ],\n    \"shipping_address\": \"123 Main St, City, Country\"\n}"
+						},
+						"url": {
+							"raw": "{{order_service_url}}/orders/createOrder",
+							"host": [
+								"{{order_service_url}}"
+							],
+							"path": [
+								"orders",
+								"createOrder"
+							]
+						},
+						"description": "Create a new order"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{order_service_url}}/orders/:order_id",
+							"host": [
+								"{{order_service_url}}"
+							],
+							"path": [
+								"orders",
+								":order_id"
+							],
+							"variable": [
+								{
+									"key": "order_id",
+									"value": "",
+									"description": "ID of the order to retrieve"
+								}
+							]
+						},
+						"description": "Get order details by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"cancelled\"\n}"
+						},
+						"url": {
+							"raw": "{{order_service_url}}/orders/:order_id",
+							"host": [
+								"{{order_service_url}}"
+							],
+							"path": [
+								"orders",
+								":order_id"
+							],
+							"variable": [
+								{
+									"key": "order_id",
+									"value": "",
+									"description": "ID of the order to update"
+								}
+							]
+						},
+						"description": "Update order status"
+					},
+					"response": []
+				},
+				{
+					"name": "List Orders",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{order_service_url}}/orders",
+							"host": [
+								"{{order_service_url}}"
+							],
+							"path": [
+								"orders"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "",
+									"description": "Filter by order status",
+									"disabled": true
+								}
+							]
+						},
+						"description": "List all orders for current user"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "user_service_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "order_service_url",
+			"value": "http://localhost:8001",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
